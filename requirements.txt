@@ -1,0 +1,4 @@
+django
+django-ninja
+rav
+django-ninja-jwt[crypto]
