@@ -5,5 +5,11 @@ scripts:
     - cd src && python manage.py makemigrations
   migrate:
     - cd src && python manage.py migrate
+  shell:
+    - cd src && python manage.py shell
   createsuperuser:
     - cd src && python manage.py createsuperuser
+  curl_auth: |
+    curl -X POST -H "Content-type: application/json" -d '{"username": "user", "password": "user"}' http://localhost:8001/api/token/pair
+  curl_protected: |
+    curl -X GET -H "Authorization: Bearer <your curl_auth access token>" http://localhost:8001/api/me

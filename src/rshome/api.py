@@ -1,6 +1,13 @@
-from ninja import NinjaAPI, Schema
+from ninja import Schema
+from ninja_jwt.controller import NinjaJWTDefaultController
+from ninja_extra import NinjaExtraAPI
+from waitlists.api import router as waitlist_router
+import helpers
 
-api = NinjaAPI()
+api = NinjaExtraAPI()
+api.register_controllers(NinjaJWTDefaultController)
+api.add_router('waitlist/', router=waitlist_router)
+
 
 class UserSchema(Schema):
     username: str
@@ -12,8 +19,8 @@ class UserSchema(Schema):
 @api.get('/home')
 def home_view(request):
     print(request)
-    return 'Hello World!'
+    return {"message": "Hello world"}
 
-@api.get('/me', response=UserSchema)
+@api.get('/me', response=UserSchema, auth=helpers.api_auth_user_required)
 def me(request):
     return request.user
