@@ -4,3 +4,7 @@ rav
 pydantic[email]
 django-ninja-jwt[crypto]
 django-cors-headers
+python-decouple
+gunicorn
+dj-database-url
+psycopg2-binary

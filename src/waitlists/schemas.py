@@ -2,15 +2,15 @@ from ninja import Schema
 from datetime import datetime
 from pydantic import EmailStr, model_validator
 from .models import WaitlistEntry
-from typing import List
+from typing import List, Any
 
 
 class WaitlistEntryCreateSchema(Schema):
-    email: EmailStr
+    email: str
 
 
 class ErrorWaitlistEntryCreateSchema(Schema):
-    email: List[dict]
+    email: List[Any]
     # non_field_errors = List[dict] = []
 
 class WaitlistEntryListSchema(Schema):

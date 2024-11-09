@@ -1,17 +1,17 @@
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!uxc%=$-*e!bbp6c%2=0hdv@us*$++gt=vygpnj3)ppq(n=n)!'
+SECRET_KEY = config('SECRET_KEY', default=None, cast=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["localhost", "209.38.190.234"]
 
 # Application definition
 
@@ -72,6 +72,18 @@ DATABASES = {
     }
 }
 
+DATABASE_URL = config('DATABASE_URL', cast=str, default=None)
+
+if DATABASE_URL:
+    import dj_database_url
+    DATABASES = {
+    'default': dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=300,
+        conn_health_checks=True
+    )
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -123,10 +135,12 @@ NINJA_JWT = {
 
 
 #CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", #next.js endpoint
-    "http://127.0.0.1:3000", #next.js endpoint
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+
+# ENV_CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=str, default="")
+
+# CORS_ALLOWED_ORIGINS = [origins.strip() for origins in ENV_CORS_ALLOWED_ORIGINS.split(',')]
+
 CORS_URLS_REGEX = r"^/api/.*$"
 
 

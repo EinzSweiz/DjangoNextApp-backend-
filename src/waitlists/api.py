@@ -1,7 +1,8 @@
 from ninja import Router
 from .models import WaitlistEntry
 from typing import List
-from .schemas import WaitlistEntryListSchema, WaitlistEntryDetailSchema, WaitlistEntryCreateSchema
+import json
+from .schemas import WaitlistEntryListSchema, WaitlistEntryDetailSchema, WaitlistEntryCreateSchema, ErrorWaitlistEntryCreateSchema
 from django.shortcuts import get_object_or_404
 import helpers
 from .forms import WaitlistEntryForm
@@ -23,17 +24,18 @@ def list_waitlist_entires(request):
          
 
 
-@router.post('', response=WaitlistEntryCreateSchema, auth=helpers.api_auth_user_or_annon)
+@router.post('', response={200: WaitlistEntryCreateSchema, 400: ErrorWaitlistEntryCreateSchema}, auth=helpers.api_auth_user_or_annon)
 def create_waitlist(request, data:WaitlistEntryCreateSchema):
-    if WaitlistEntry.objects.filter(email=data.dict()['email']).exists():
-        raise ValueError('Email should be unique!')
     form = WaitlistEntryForm(data.dict())
-    if form.is_valid():
-        cleaned_data = form.cleaned_data
-        obj = WaitlistEntry.objects.create(**cleaned_data.dict())
-        if request.user.is_authenticated:
-            obj.user =request.user
-        obj.save()
+    if not form.is_valid():
+        form_errors = json.loads(form.errors.as_json())
+        return 400, form_errors
+    # cleaned_data = form.cleaned_data
+    # obj = WaitlistEntry.objects.create(**cleaned_data.dict())
+    obj = form.save(commit=False)
+    if request.user.is_authenticated:
+        obj.user =request.user
+    obj.save()
     return obj
 
 

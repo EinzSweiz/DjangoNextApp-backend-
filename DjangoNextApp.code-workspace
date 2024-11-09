@@ -1,8 +1,12 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "terminal.integrated.env.linux": {
+            "KUBECONFIG": "${workspaceFolder}/k8s/config.yaml"
+        }
+    }
 }
