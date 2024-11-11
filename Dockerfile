@@ -45,8 +45,12 @@ RUN pip install -r /tmp/requirements.txt
 
 # database isn't available during build
 # run any other commands that do not need the database
+# Set environment variables
+ENV DATABASE_URL=postgresql://neondb_owner:YvF3JHDM6nPd@ep-snowy-surf-a24hzvez.eu-central-1.aws.neon.tech/neondb?sslmode=require
+ENV SECRET_KEY="WxzVJHDn2uooqfRBIlo6xGfhWZ2iLbdnl0OjouYPhaYsjpbxezjzdVFgejWMN5HYjZYSWYWq"
+ENV DEBUG=1
 # such as:
-# RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
 
 # set the Django default project name
 ARG PROJ_NAME="rshome"

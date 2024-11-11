@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-ingress
+  annotations:
+    # Optional: Uncomment this if you're using Cert-Manager for automatic SSL/TLS certificates
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+    - host: 209.38.190.234  # Using the external IP of the LoadBalancer (django-nextjs-service)
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: django-nextjs-service
+                port:
+                  number: 8002
+  tls:
+    - hosts:
+        - 209.38.190.234  # The same external IP here
+      secretName: django-tls-cert  # The TLS secret that contains your certificate and key

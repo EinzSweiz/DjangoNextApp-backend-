@@ -39,7 +39,15 @@ def create_waitlist(request, data:WaitlistEntryCreateSchema):
     return obj
 
 
-@router.get('{entry_id}', response=WaitlistEntryDetailSchema)
-def detail_waitlist_entries(request, entry_id:int):
+@router.get('{entry_id}', response=WaitlistEntryDetailSchema, auth=helpers.api_auth_user_required)
+def detail_waitlist_entries(request, entry_id: int):
     object = get_object_or_404(WaitlistEntry, id=entry_id)
-    return object
+
+    res = {
+        "id": object.id,
+        "email": object.email,
+        "updated": object.updated,
+        "timestamp": object.timestamp,
+    }
+
+    return res  # Return the dictionary directly

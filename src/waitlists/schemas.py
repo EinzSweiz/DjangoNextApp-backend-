@@ -2,7 +2,7 @@ from ninja import Schema
 from datetime import datetime
 from pydantic import EmailStr, model_validator
 from .models import WaitlistEntry
-from typing import List, Any
+from typing import List, Any, Optional
 
 
 class WaitlistEntryCreateSchema(Schema):
@@ -19,6 +19,7 @@ class WaitlistEntryListSchema(Schema):
     username: str
     
 class WaitlistEntryDetailSchema(Schema):
+    id: int
     email: EmailStr
     updated: datetime
     timestamp: datetime

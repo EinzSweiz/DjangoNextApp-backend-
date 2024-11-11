@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    events {
+      # The events block is mandatory in Nginx configurations
+      worker_connections 1024;  # You can adjust this value based on your needs
+    }
+    http {
+      server {
+    listen 80;
+    
+    location / {
+        proxy_pass http://django-nextjs-service:8002;
+        # Any other necessary proxy headers, e.g.:
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+    }
